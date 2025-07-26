@@ -4,49 +4,84 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><%= title %></title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📝</text></svg>">
     <style>
-    	@media (prefers-color-scheme: dark){
+    	body {
+    		margin: 0 auto;
+    		max-width: 800px;
+    		padding: 0;
+            padding-bottom: 200px;
+    		font-family: system-ui;
+    		font-size: 16px;
+    		line-height: 1.6;
+    		background: #fff;
+    		color: #333;
+    	}
+    	h1 {
+    		margin: 0;
+    		padding: 24px 24px 20px;
+    		font-size: 24px;
+    		border-bottom: 1px solid #eee;
+    	}
+    	article {
+    		padding: 24px;
+    		border-bottom: 1px solid #eee;
+    	}
+    	article:hover {
+    		background: #fafafa;
+    	}
+    	article > header {
+    		display: flex;
+    		gap: 16px;
+    		margin-bottom: 12px;
+    		font-size: 15px;
+    	}
+    	address {
+    		font-weight: 600;
+    		font-style: normal;
+    	}
+    	time {
+    		color: #666;
+    	}
+    	article p {
+    		margin: 0 0 16px 0;
+    	}
+    	article p:last-child {
+    		margin: 0;
+    	}
+    	@media (prefers-color-scheme: dark) {
     		body {
     			background: #000;
+    			color: #ddd;
     		}
-    	}
-    	body{
-    		margin: 1em auto;
-    		max-width: 40em;
-    		padding: 0.62em 3.24em;
-    		font: 1.2em/1.62 sans-serif;
-    	}
-    	h1,h2,h3 {
-    		line-height: 1.2;
-    	}
-    	@media print{
-    		body{
-    			max-width: none;
+    		article {
+    			border-color: #222;
+    		}
+    		article:hover {
+    			background: #111;
+    		}
+    		h1 {
+    			border-color: #222;
+    		}
+    		time {
+    			color: #999;
     		}
     	}
     </style>
-    <script type="speculationrules">
-    {
-        "prerender": [
-            {
-                "where": {
-                    "selector_matches": "a"
-                }
-            }
-        ]
-    }
-    </script>
   </head>
   <body>
-      <h1><%= title %></h1>
-      <hr />
-      <div id="posts">
+      <header>
+          <h1><%= title %></h1>
+      </header>
+      <main>
         <% for post in posts { %>
-            <span class="username"><%= username %></span>
-            <small class="date_formatted"><%= post.date_formatted %></small>
-            <p class="content"><%- post.content %></p>
+        <article>
+            <header>
+                <address><%= username %></address>
+                <time><%= post.date_formatted %></time>
+            </header>
+            <%- post.content %>
+        </article>
         <% } %>
-      </div>
+      </main>
   </body>
 </html>

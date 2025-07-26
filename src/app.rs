@@ -17,7 +17,6 @@ fn markdown_to_html(markdown: &str) -> String {
 pub struct Post {
     content: String,
     date_formatted: String,
-    timestamp: DateTime<Local>,
 }
 
 fn format_date(date: &DateTime<Local>) -> String {
@@ -46,7 +45,6 @@ impl Default for Post {
         Self {
             content,
             date_formatted,
-            timestamp: created_at,
         }
     }
 }
@@ -76,11 +74,40 @@ impl App {
     }
 
     fn load_existing_posts(&self) -> Result<Vec<Post>> {
+        use scraper::{Html, Selector};
+        
         let index_path = self.config.folder.join("index.html");
         if !index_path.exists() {
             return Ok(Vec::new());
         }
-        Ok(Vec::new())
+        
+        let html_content = std::fs::read_to_string(&index_path)?;
+        let document = Html::parse_document(&html_content);
+        
+        let post_selector = Selector::parse("article").unwrap();
+        let date_selector = Selector::parse("time").unwrap();
+        
+        let mut posts = Vec::new();
+        
+        for post_element in document.select(&post_selector) {
+            if let Some(date_element) = post_element.select(&date_selector).next() {
+                let date_text = date_element.text().collect::<String>();
+                let date_formatted = date_text.to_string();
+                
+                // Get content by removing the header
+                let mut content_html = post_element.inner_html();
+                if let Some(header_end) = content_html.find("</header>") {
+                    content_html = content_html[header_end + 9..].trim().to_string();
+                }
+                
+                posts.push(Post {
+                    content: content_html,
+                    date_formatted,
+                });
+            }
+        }
+        
+        Ok(posts)
     }
 
     fn generate_index(&self, posts: &[Post]) -> Result<()> {
@@ -101,12 +128,11 @@ impl App {
         let new_post = Post {
             content: html_content,
             date_formatted: self.post.date_formatted.clone(),
-            timestamp: self.post.timestamp,
         };
 
         // Add new post at the beginning (newest first)
         posts.insert(0, new_post);
-        Ok(self.generate_index(&posts)?)
+        self.generate_index(&posts)
     }
 }
 
@@ -143,7 +169,7 @@ impl eframe::App for App {
             if button_response.clicked() || ctrl_enter_pressed {
                 match self.publish() {
                     Ok(_) => ctx.send_viewport_cmd(egui::ViewportCommand::Close),
-                    Err(e) => eprintln!("Failed to publish: {}", e),
+                    Err(e) => eprintln!("Failed to publish: {e}"),
                 }
             }
         });
