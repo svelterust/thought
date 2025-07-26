@@ -14,7 +14,7 @@ impl eframe::App for App {
             ui.add_space(5.0);
 
             // Text input area
-            let available_height = ui.available_height() - 25.0;
+            let available_height = ui.available_height() - 40.0;
             let text_area = ui.add_sized(
                 vec2(ui.available_width(), available_height),
                 TextEdit::multiline(&mut self.thought),
@@ -26,11 +26,11 @@ impl eframe::App for App {
             let button = Button::new("Publish");
             let button_response = if self.thought.is_empty() {
                 ui.add_enabled_ui(false, |ui| {
-                    ui.add_sized(vec2(ui.available_width(), 0.0), button)
+                    ui.add_sized(vec2(ui.available_width(), 30.0), button)
                 })
                 .inner
             } else {
-                ui.add_sized(vec2(ui.available_width(), 0.0), button)
+                ui.add_sized(vec2(ui.available_width(), 30.0), button)
             };
 
             // Publish to the world!

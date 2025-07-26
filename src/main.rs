@@ -20,6 +20,27 @@ fn main() -> eframe::Result {
             // Setup App
             cc.egui_ctx.set_visuals(egui::Visuals::light());
             cc.egui_ctx.set_pixels_per_point(2.0);
+
+            // Set style
+            let mut style = (*cc.egui_ctx.style()).clone();
+            style.text_styles = [
+                (
+                    egui::TextStyle::Heading,
+                    egui::FontId::new(24.0, egui::FontFamily::Proportional),
+                ),
+                (
+                    egui::TextStyle::Body,
+                    egui::FontId::new(18.0, egui::FontFamily::Proportional),
+                ),
+                (
+                    egui::TextStyle::Button,
+                    egui::FontId::new(16.0, egui::FontFamily::Proportional),
+                ),
+            ]
+            .iter()
+            .cloned()
+            .collect();
+            cc.egui_ctx.set_style(style);
             Ok(Box::new(App::default()))
         }),
     )
