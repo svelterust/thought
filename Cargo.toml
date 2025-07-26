@@ -5,10 +5,15 @@ edition = "2024"
 
 [dependencies]
 egui = "0.32"
+sailfish = "0.9"
+chrono = { version = "0.4", default-features = false, features = ["clock", "std"] }
 eframe = { version = "0.32", default-features = false, features = [
     "glow",
     "wayland",
     "default_fonts",
+] }
+pulldown-cmark = { version = "0.13", default-features = false, features = [
+    "html",
 ] }
 
 [profile.release]

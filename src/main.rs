@@ -19,7 +19,7 @@ fn main() -> eframe::Result {
         Box::new(|cc| {
             // Setup App
             cc.egui_ctx.set_visuals(egui::Visuals::light());
-            cc.egui_ctx.set_pixels_per_point(2.0);
+            cc.egui_ctx.set_pixels_per_point(1.5);
 
             // Set style
             let mut style = (*cc.egui_ctx.style()).clone();
