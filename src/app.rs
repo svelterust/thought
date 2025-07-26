@@ -10,7 +10,11 @@ impl eframe::App for App {
         egui::CentralPanel::default().show(ctx, |ui| {
             ui.heading("Thought");
             ui.add_space(5.0);
-            ui.text_edit_multiline(&mut self.thought);
+            let text_area = ui.add_sized(
+                ui.available_size(),
+                egui::TextEdit::multiline(&mut self.thought),
+            );
+            text_area.request_focus();
             if !self.thought.is_empty() {
                 ui.add_space(5.0);
                 if ui.button("Publish").clicked() {
