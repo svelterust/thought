@@ -68,6 +68,17 @@ fn main() -> Result<()> {
                 return Ok(());
             }
 
+            // Prompt for username
+            print!("Enter username: ");
+            io::stdout().flush()?;
+            let mut username = String::new();
+            io::stdin().read_line(&mut username)?;
+            let username = username.trim().to_string();
+            if username.is_empty() {
+                eprintln!("Username cannot be empty.");
+                return Ok(());
+            }
+
             // Prompt for folder
             print!("Enter blog folder: ");
             io::stdout().flush()?;
@@ -82,6 +93,7 @@ fn main() -> Result<()> {
             // Create config
             let config = Config {
                 title,
+                username,
                 folder: PathBuf::from(folder),
             };
             config.save()?;

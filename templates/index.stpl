@@ -31,8 +31,9 @@
       <hr />
       <div id="posts">
         <% for post in posts { %>
+            <span><%= username %></span>
             <small><%= post.date_formatted %></small>
-            <p><%= post.content %></p>
+            <p><%- post.content %></p>
         <% } %>
       </div>
   </body>
