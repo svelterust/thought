@@ -67,24 +67,21 @@ fn main() -> Result<()> {
         }
 
         // Prompt for folder
-        let default_folder = dirs::home_dir()
-            .unwrap_or_default()
-            .to_string_lossy()
-            .to_string();
-
-        print!("Enter blog folder: {default_folder}");
+        print!("Enter blog folder: ");
         io::stdout().flush()?;
         let mut folder_input = String::new();
         io::stdin().read_line(&mut folder_input)?;
-        let folder_input = folder_input.trim();
-        let folder = if folder_input.is_empty() {
-            PathBuf::from(default_folder)
-        } else {
-            PathBuf::from(folder_input)
-        };
+        let folder = folder_input.trim();
+        if folder.is_empty() {
+            eprintln!("Folder cannot be empty.");
+            return Ok(());
+        }
 
         // Create config
-        let config = Config { title, folder };
+        let config = Config {
+            title,
+            folder: PathBuf::from(folder),
+        };
         config.save()?;
         config.ensure_folder_exists()?;
     }
