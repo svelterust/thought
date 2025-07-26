@@ -1,5 +1,5 @@
 use eframe::egui;
-use egui::{Button, TextEdit, vec2};
+use egui::{Button, Key, TextEdit, vec2};
 
 #[derive(Default)]
 pub struct App {
@@ -22,7 +22,7 @@ impl eframe::App for App {
             text_area.request_focus();
             ui.add_space(5.0);
 
-            // Publish button
+            // Button with disabled/enabled state
             let button = Button::new("Publish");
             let button_response = if self.thought.is_empty() {
                 ui.add_enabled_ui(false, |ui| {
@@ -32,7 +32,10 @@ impl eframe::App for App {
             } else {
                 ui.add_sized(vec2(ui.available_width(), 0.0), button)
             };
-            if button_response.clicked() {
+
+            // Publish to the world!
+            let super_enter_pressed = ui.input(|i| i.modifiers.ctrl && i.key_pressed(Key::Enter));
+            if button_response.clicked() || (super_enter_pressed && !self.thought.is_empty()) {
                 println!("Thought published: {}", self.thought);
             }
         });
