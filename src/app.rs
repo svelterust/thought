@@ -91,7 +91,6 @@ impl eframe::App for App {
             });
             if button_response.clicked() || ctrl_enter_pressed {
                 let html = markdown_to_html(&self.post.content);
-                dbg!(&self.post);
                 println!("{}", html.trim());
             }
         });
