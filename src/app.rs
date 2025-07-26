@@ -1,6 +1,6 @@
 use crate::config::Config;
 use chrono::{Datelike, Local};
-use color_eyre::Result;
+use anyhow::Result;
 use eframe::egui::*;
 use pulldown_cmark::{Parser, html};
 use sailfish::TemplateSimple;

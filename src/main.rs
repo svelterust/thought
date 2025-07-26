@@ -4,7 +4,7 @@ mod config;
 
 // Imports
 use app::App;
-use color_eyre::{Result, eyre::eyre};
+use anyhow::{Result, anyhow};
 use config::Config;
 use eframe::egui;
 use std::io::{self, Write};
@@ -53,9 +53,9 @@ fn run_app(config: Config) -> eframe::Result<()> {
 
 fn main() -> Result<()> {
     // Check if config exists
-    color_eyre::install()?;
+    // anyhow doesn't need installation
     match Config::load() {
-        Some(config) => run_app(config).map_err(|err| eyre!("Failed to start app: {err}")),
+        Some(config) => run_app(config).map_err(|err| anyhow!("Failed to start app: {err}")),
         None => {
             // Prompt for title
             print!("Enter blog title: ");
@@ -98,7 +98,7 @@ fn main() -> Result<()> {
             };
             config.save()?;
             config.ensure_folder_exists()?;
-            run_app(config).map_err(|err| eyre!("Failed to start app: {err}"))
+            run_app(config).map_err(|err| anyhow!("Failed to start app: {err}"))
         }
     }
 }
