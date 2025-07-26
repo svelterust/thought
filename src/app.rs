@@ -34,8 +34,10 @@ impl eframe::App for App {
             };
 
             // Publish to the world!
-            let super_enter_pressed = ui.input(|i| i.modifiers.ctrl && i.key_pressed(Key::Enter));
-            if button_response.clicked() || (super_enter_pressed && !self.thought.is_empty()) {
+            let ctrl_enter_pressed = ui.input(|i| {
+                i.modifiers.ctrl && i.key_pressed(Key::Enter) && !self.thought.is_empty()
+            });
+            if button_response.clicked() || ctrl_enter_pressed {
                 println!("Thought published: {}", self.thought);
             }
         });
