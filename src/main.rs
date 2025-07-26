@@ -6,7 +6,13 @@ use app::App;
 use eframe::egui;
 
 fn main() -> eframe::Result {
-    let options = eframe::NativeOptions::default();
+    let options = eframe::NativeOptions {
+        viewport: egui::ViewportBuilder::default()
+            .with_resizable(false)
+            .with_decorations(false),
+        centered: true,
+        ..Default::default()
+    };
     eframe::run_native(
         "Thought",
         options,
