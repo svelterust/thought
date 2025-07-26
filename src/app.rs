@@ -1,6 +1,6 @@
 use crate::config::Config;
-use chrono::{Datelike, Local};
 use anyhow::Result;
+use chrono::{Datelike, Local};
 use eframe::egui::*;
 use pulldown_cmark::{Parser, html};
 use sailfish::TemplateSimple;
@@ -139,7 +139,11 @@ impl eframe::App for App {
                 && !self.post.content.is_empty()
             {
                 match self.publish() {
-                    Ok(_) => ctx.send_viewport_cmd(ViewportCommand::Close),
+                    Ok(_) => {
+                        let posts = self.config.folder.join("index.html");
+                        let _ = open::that(posts);
+                        ctx.send_viewport_cmd(ViewportCommand::Close)
+                    }
                     Err(e) => eprintln!("Failed to publish: {e}"),
                 }
             }

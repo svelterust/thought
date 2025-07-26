@@ -27,6 +27,7 @@ chrono = { version = "0.4", default-features = false, features = [
 pulldown-cmark = { version = "0.13", default-features = false, features = [
     "html",
 ] }
+open = "5.3.2"
 
 [profile.release]
 lto = true
