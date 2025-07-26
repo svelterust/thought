@@ -1,0 +1,38 @@
+body {
+    margin: 0 auto;
+    max-width: 900px;
+    padding: 0;
+    font-family: system-ui;
+    font-size: 16px;
+    line-height: 1.6;
+    background: #fff;
+    color: #333;
+}
+h1 {
+    margin: 0;
+    padding: 24px 24px 20px;
+    font-size: 24px;
+    border-bottom: 1px solid #eee;
+}
+article {
+    padding: 24px;
+}
+article > header {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 12px;
+    font-size: 15px;
+}
+address {
+    font-weight: 600;
+    font-style: normal;
+}
+time {
+    color: #666;
+}
+article p {
+    margin: 0 0 16px 0;
+}
+article p:last-child {
+    margin: 0;
+}

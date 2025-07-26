@@ -6,6 +6,9 @@ use egui::{Button, Key, TextEdit, vec2};
 use pulldown_cmark::{Parser, html};
 use sailfish::TemplateSimple;
 
+// Embed default styles here
+const STYLES_CSS: &str = include_str!("styles.css");
+
 fn markdown_to_html(markdown: &str) -> String {
     let parser = Parser::new(markdown);
     let mut output = String::new();
@@ -75,38 +78,38 @@ impl App {
 
     fn load_existing_posts(&self) -> Result<Vec<Post>> {
         use scraper::{Html, Selector};
-        
+
         let index_path = self.config.folder.join("index.html");
         if !index_path.exists() {
             return Ok(Vec::new());
         }
-        
+
         let html_content = std::fs::read_to_string(&index_path)?;
         let document = Html::parse_document(&html_content);
-        
+
         let post_selector = Selector::parse("article").unwrap();
         let date_selector = Selector::parse("time").unwrap();
-        
+
         let mut posts = Vec::new();
-        
+
         for post_element in document.select(&post_selector) {
             if let Some(date_element) = post_element.select(&date_selector).next() {
                 let date_text = date_element.text().collect::<String>();
                 let date_formatted = date_text.to_string();
-                
+
                 // Get content by removing the header
                 let mut content_html = post_element.inner_html();
                 if let Some(header_end) = content_html.find("</header>") {
                     content_html = content_html[header_end + 9..].trim().to_string();
                 }
-                
+
                 posts.push(Post {
                     content: content_html,
                     date_formatted,
                 });
             }
         }
-        
+
         Ok(posts)
     }
 
@@ -118,7 +121,14 @@ impl App {
         };
         let html = template.render_once()?;
         let index_path = self.config.folder.join("index.html");
-        Ok(std::fs::write(index_path, html)?)
+        std::fs::write(index_path, html)?;
+
+        // Generate styles.css if it doesn't exist
+        let styles_path = self.config.folder.join("styles.css");
+        if !styles_path.exists() {
+            std::fs::write(styles_path, STYLES_CSS)?;
+        }
+        Ok(())
     }
 
     fn publish(&mut self) -> Result<()> {

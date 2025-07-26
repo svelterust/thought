@@ -4,69 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><%= title %></title>
-    <style>
-    	body {
-    		margin: 0 auto;
-    		max-width: 800px;
-    		padding: 0;
-            padding-bottom: 200px;
-    		font-family: system-ui;
-    		font-size: 16px;
-    		line-height: 1.6;
-    		background: #fff;
-    		color: #333;
-    	}
-    	h1 {
-    		margin: 0;
-    		padding: 24px 24px 20px;
-    		font-size: 24px;
-    		border-bottom: 1px solid #eee;
-    	}
-    	article {
-    		padding: 24px;
-    		border-bottom: 1px solid #eee;
-    	}
-    	article:hover {
-    		background: #fafafa;
-    	}
-    	article > header {
-    		display: flex;
-    		gap: 16px;
-    		margin-bottom: 12px;
-    		font-size: 15px;
-    	}
-    	address {
-    		font-weight: 600;
-    		font-style: normal;
-    	}
-    	time {
-    		color: #666;
-    	}
-    	article p {
-    		margin: 0 0 16px 0;
-    	}
-    	article p:last-child {
-    		margin: 0;
-    	}
-    	@media (prefers-color-scheme: dark) {
-    		body {
-    			background: #000;
-    			color: #ddd;
-    		}
-    		article {
-    			border-color: #222;
-    		}
-    		article:hover {
-    			background: #111;
-    		}
-    		h1 {
-    			border-color: #222;
-    		}
-    		time {
-    			color: #999;
-    		}
-    	}
-    </style>
+    <link rel="stylesheet" href="styles.css">
   </head>
   <body>
       <header>
