@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><%= title %></title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📝</text></svg>">
     <style>
     	@media (prefers-color-scheme: dark){
     		body {
@@ -25,15 +26,26 @@
     		}
     	}
     </style>
+    <script type="speculationrules">
+    {
+        "prerender": [
+            {
+                "where": {
+                    "selector_matches": "a"
+                }
+            }
+        ]
+    }
+    </script>
   </head>
   <body>
       <h1><%= title %></h1>
       <hr />
       <div id="posts">
         <% for post in posts { %>
-            <span><%= username %></span>
-            <small><%= post.date_formatted %></small>
-            <p><%- post.content %></p>
+            <span class="username"><%= username %></span>
+            <small class="date_formatted"><%= post.date_formatted %></small>
+            <p class="content"><%- post.content %></p>
         <% } %>
       </div>
   </body>
