@@ -1,0 +1,16 @@
+[package]
+name = "thought"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+egui = "0.32"
+eframe = { version = "0.32", default-features = false, features = [
+    "glow",
+    "wayland",
+    "default_fonts",
+] }
+
+[profile.release]
+lto = true
+strip = true
