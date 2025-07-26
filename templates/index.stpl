@@ -1,1 +1,39 @@
-<p>Posts</p>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <style>
+    	@media (prefers-color-scheme: dark){
+    		body {
+    			background:#000
+    		}
+    	}
+    	body{
+    		margin:1em auto;
+    		max-width:40em;
+    		padding:0 .62em 3.24em;
+    		font:1.2em/1.62 sans-serif
+    	}
+    	h1,h2,h3 {
+    		line-height:1.2
+    	}
+    	@media print{
+    		body{
+    			max-width:none
+    		}
+    	}
+    </style>
+  </head>
+  <body>
+      <h1><%= title %></h1>
+      <hr />
+      <div id="posts">
+        <% for post in posts { %>
+            <small><%= post.date_formatted %></small>
+            <p><%= post.content %></p>
+        <% } %>
+      </div>
+  </body>
+</html>

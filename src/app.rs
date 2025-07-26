@@ -14,7 +14,6 @@ fn markdown_to_html(markdown: &str) -> String {
 pub struct Post {
     content: String,
     date_formatted: String,
-    created_at: DateTime<Local>,
 }
 
 fn format_date(date: &DateTime<Local>) -> String {
@@ -26,12 +25,11 @@ fn format_date(date: &DateTime<Local>) -> String {
         _ => "th",
     };
     format!(
-        "{} {}{}, {} [{}]",
+        "{} {}{}, {}",
         date.format("%B"),
         day,
         suffix,
         date.format("%Y"),
-        date.format("%I:%M %p")
     )
 }
 
@@ -43,7 +41,6 @@ impl Default for Post {
         let date_formatted = format_date(&created_at);
         Self {
             content,
-            created_at,
             date_formatted,
         }
     }

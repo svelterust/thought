@@ -21,7 +21,6 @@ impl Config {
         let config_path = Self::config_path();
         if config_path.exists() {
             let content = std::fs::read_to_string(&config_path).ok()?;
-            println!("Loaded config from {}", config_path.display());
             toml::from_str(&content).ok()
         } else {
             None
