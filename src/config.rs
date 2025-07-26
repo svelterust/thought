@@ -11,27 +11,21 @@ pub struct Config {
 
 impl Config {
     pub fn config_path() -> PathBuf {
-        let config_dir = dirs::config_dir()
+        dirs::config_dir()
             .expect("Could not find config directory")
-            .join("thought");
-        std::fs::create_dir_all(&config_dir).expect("Could not create config directory");
-        config_dir.join("config.toml")
+            .join("thought/config.toml")
     }
 
     pub fn load() -> Option<Self> {
-        let config_path = Self::config_path();
-        if config_path.exists() {
-            let content = std::fs::read_to_string(&config_path).ok()?;
-            toml::from_str(&content).ok()
-        } else {
-            None
-        }
+        std::fs::read_to_string(Self::config_path())
+            .ok()
+            .and_then(|content| toml::from_str(&content).ok())
     }
 
     pub fn save(&self) -> Result<()> {
-        let config_path = Self::config_path();
-        let content = toml::to_string(self)?;
-        Ok(std::fs::write(config_path, content)?)
+        let path = Self::config_path();
+        std::fs::create_dir_all(path.parent().unwrap())?;
+        Ok(std::fs::write(path, toml::to_string(self)?)?)
     }
 
     pub fn ensure_folder_exists(&self) -> Result<()> {
