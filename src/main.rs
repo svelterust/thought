@@ -10,7 +10,7 @@ use eframe::egui;
 use std::io::{self, Write};
 use std::path::PathBuf;
 
-fn run_app() -> eframe::Result<()> {
+fn run_app(config: Config) -> eframe::Result<()> {
     let options = eframe::NativeOptions {
         viewport: egui::ViewportBuilder::default()
             .with_resizable(false)
@@ -46,7 +46,7 @@ fn run_app() -> eframe::Result<()> {
             .cloned()
             .collect();
             cc.egui_ctx.set_style(style);
-            Ok(Box::new(App::default()))
+            Ok(Box::new(App::new(config)))
         }),
     )
 }
@@ -54,38 +54,39 @@ fn run_app() -> eframe::Result<()> {
 fn main() -> Result<()> {
     // Check if config exists
     color_eyre::install()?;
-    if Config::load().is_none() {
-        // Prompt for title
-        print!("Enter blog title: ");
-        io::stdout().flush()?;
-        let mut title = String::new();
-        io::stdin().read_line(&mut title)?;
-        let title = title.trim().to_string();
-        if title.is_empty() {
-            eprintln!("Title cannot be empty.");
-            return Ok(());
-        }
+    match Config::load() {
+        Some(config) => run_app(config).map_err(|err| eyre!("Failed to start app: {err}")),
+        None => {
+            // Prompt for title
+            print!("Enter blog title: ");
+            io::stdout().flush()?;
+            let mut title = String::new();
+            io::stdin().read_line(&mut title)?;
+            let title = title.trim().to_string();
+            if title.is_empty() {
+                eprintln!("Title cannot be empty.");
+                return Ok(());
+            }
 
-        // Prompt for folder
-        print!("Enter blog folder: ");
-        io::stdout().flush()?;
-        let mut folder_input = String::new();
-        io::stdin().read_line(&mut folder_input)?;
-        let folder = folder_input.trim();
-        if folder.is_empty() {
-            eprintln!("Folder cannot be empty.");
-            return Ok(());
-        }
+            // Prompt for folder
+            print!("Enter blog folder: ");
+            io::stdout().flush()?;
+            let mut folder_input = String::new();
+            io::stdin().read_line(&mut folder_input)?;
+            let folder = folder_input.trim();
+            if folder.is_empty() {
+                eprintln!("Folder cannot be empty.");
+                return Ok(());
+            }
 
-        // Create config
-        let config = Config {
-            title,
-            folder: PathBuf::from(folder),
-        };
-        config.save()?;
-        config.ensure_folder_exists()?;
+            // Create config
+            let config = Config {
+                title,
+                folder: PathBuf::from(folder),
+            };
+            config.save()?;
+            config.ensure_folder_exists()?;
+            run_app(config).map_err(|err| eyre!("Failed to start app: {err}"))
+        }
     }
-
-    // Start app
-    run_app().map_err(|err| eyre!("Failed to start app: {err}"))
 }

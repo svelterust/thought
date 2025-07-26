@@ -2,6 +2,9 @@ use chrono::{DateTime, Datelike, Local};
 use eframe::egui;
 use egui::{Button, Key, TextEdit, vec2};
 use pulldown_cmark::{Parser, html};
+use sailfish::TemplateSimple;
+
+use crate::config::Config;
 
 fn markdown_to_html(markdown: &str) -> String {
     let parser = Parser::new(markdown);
@@ -46,10 +49,28 @@ impl Default for Post {
     }
 }
 
-#[derive(Debug, Default)]
+#[derive(TemplateSimple)]
+#[template(path = "index.stpl")]
+struct IndexTemplate {
+    title: String,
+    posts: Vec<Post>,
+}
+
+#[derive(Debug)]
 pub struct App {
-    focused: bool,
     post: Post,
+    focused: bool,
+    config: Config,
+}
+
+impl App {
+    pub fn new(config: Config) -> Self {
+        Self {
+            post: Post::default(),
+            focused: false,
+            config,
+        }
+    }
 }
 
 impl eframe::App for App {
