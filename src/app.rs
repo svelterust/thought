@@ -1,4 +1,4 @@
-use chrono::{DateTime, Local};
+use chrono::{DateTime, Datelike, Local};
 use eframe::egui;
 use egui::{Button, Key, TextEdit, vec2};
 use pulldown_cmark::{Parser, html};
@@ -13,14 +13,38 @@ fn markdown_to_html(markdown: &str) -> String {
 #[derive(Debug)]
 pub struct Post {
     content: String,
+    date_formatted: String,
     created_at: DateTime<Local>,
+}
+
+fn format_date(date: &DateTime<Local>) -> String {
+    let day = date.day();
+    let suffix = match day {
+        1 | 21 | 31 => "st",
+        2 | 22 => "nd",
+        3 | 23 => "rd",
+        _ => "th",
+    };
+    format!(
+        "{} {}{}, {} [{}]",
+        date.format("%B"),
+        day,
+        suffix,
+        date.format("%Y"),
+        date.format("%I:%M %p")
+    )
 }
 
 impl Default for Post {
     fn default() -> Self {
+        // Setup created_at and format it
+        let content = String::new();
+        let created_at = Local::now();
+        let date_formatted = format_date(&created_at);
         Self {
-            content: String::new(),
-            created_at: Local::now(),
+            content,
+            created_at,
+            date_formatted,
         }
     }
 }
@@ -35,7 +59,7 @@ impl eframe::App for App {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         egui::CentralPanel::default().show(ctx, |ui| {
             // Header
-            ui.heading("Thought");
+            ui.heading(&self.post.date_formatted);
             ui.add_space(5.0);
 
             // Text input area
